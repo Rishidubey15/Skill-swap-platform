@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, Clock, MessageSquare, Star, Trash2 } from 'lucide-react';
+import { CheckCircle, XCircle, MessageSquare, Star, Trash2 } from 'lucide-react';
 import api from '../services/api';
 
 interface SwapRequest {
@@ -100,9 +100,9 @@ function SwapRequests() {
   const filteredSwaps = getFilteredSwaps();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white dark:bg-gray-900 dark:text-gray-100">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Swap Requests</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Swap Requests</h1>
         
         {/* Tabs */}
         <div className="border-b border-gray-200">
@@ -134,13 +134,13 @@ function SwapRequests() {
       {/* Swap Requests List */}
       <div className="space-y-6">
         {filteredSwaps.map((swap) => (
-          <div key={swap._id} className="bg-white rounded-lg shadow-md p-6">
+          <div key={swap._id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {activeTab === 'received' ? swap.requester.name : swap.recipient.name}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   {new Date(swap.createdAt).toLocaleDateString()}
                 </p>
               </div>
@@ -152,31 +152,31 @@ function SwapRequests() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">
+              <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
                   {activeTab === 'received' ? 'They want to learn:' : 'You want to learn:'}
                 </h4>
-                <p className="text-purple-700 font-medium">{swap.recipientSkill.name}</p>
+                <p className="text-purple-700 dark:text-purple-300 font-medium">{swap.recipientSkill.name}</p>
                 {swap.recipientSkill.description && (
-                  <p className="text-sm text-gray-600 mt-1">{swap.recipientSkill.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{swap.recipientSkill.description}</p>
                 )}
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">
+              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
                   {activeTab === 'received' ? 'They offer:' : 'You offer:'}
                 </h4>
-                <p className="text-blue-700 font-medium">{swap.requesterSkill.name}</p>
+                <p className="text-blue-700 dark:text-blue-300 font-medium">{swap.requesterSkill.name}</p>
                 {swap.requesterSkill.description && (
-                  <p className="text-sm text-gray-600 mt-1">{swap.requesterSkill.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{swap.requesterSkill.description}</p>
                 )}
               </div>
             </div>
 
             {swap.message && (
-              <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                <h4 className="font-medium text-gray-900 mb-2">Message:</h4>
-                <p className="text-gray-700">{swap.message}</p>
+              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg mb-4">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Message:</h4>
+                <p className="text-gray-700 dark:text-gray-300">{swap.message}</p>
               </div>
             )}
 
@@ -239,12 +239,12 @@ function SwapRequests() {
       </div>
 
       {filteredSwaps.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
           <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
             No {activeTab} requests
           </h3>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             {activeTab === 'received' 
               ? "You haven't received any swap requests yet."
               : "You haven't sent any swap requests yet. Start browsing skills!"
@@ -306,7 +306,7 @@ function RatingModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Rate your experience
         </h3>

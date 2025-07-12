@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Moon, Sun } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogOut, User, Search, MessageSquare, Settings, BarChart3 } from 'lucide-react';
 
 function Navbar() {
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
   const { user, logout } = useAuth();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
+    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -73,24 +89,50 @@ function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link
-              to="/profile"
-              className={`p-2 rounded-md transition-colors flex items-center space-x-2 ${
-                isActive('/profile')
-                  ? 'bg-purple-100 text-purple-700'
-                  : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
-              }`}
-            >
-              <User className="w-4 h-4" />
-              <span className="hidden md:block text-sm font-medium">{user?.name}</span>
-            </Link>
             <button
-              onClick={logout}
-              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-              title="Logout"
+              onClick={toggleDarkMode}
+              className="p-2 rounded-md transition-colors text-gray-600 dark:text-yellow-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              title="Toggle dark mode"
             >
-              <LogOut className="w-4 h-4" />
+              {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className={`p-2 rounded-md transition-colors flex items-center space-x-2 ${
+                    isActive('/profile')
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
+                  }`}
+                >
+                  <User className="w-4 h-4" />
+                  <span className="hidden md:block text-sm font-medium">{user?.name}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  title="Logout"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 rounded-md text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

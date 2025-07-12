@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { Search, MapPin, Star, MessageSquare, Filter } from 'lucide-react';
 import api from '../services/api';
 
@@ -34,6 +35,7 @@ function Browse() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showSwapModal, setShowSwapModal] = useState(false);
   const [sentRequests, setSentRequests] = useState<{ [userId: string]: boolean }>({});
+  const { user: loggedInUser } = useAuth();
 
   useEffect(() => {
     fetchUsers();
@@ -88,36 +90,36 @@ function Browse() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white dark:bg-gray-900 dark:text-gray-100">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Browse Skills</h1>
         
         {/* Search and Filters */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 w-4 h-4" />
             <input
               type="text"
               placeholder="Search skills or names..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
-          
+
           <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 w-4 h-4" />
             <input
               type="text"
               placeholder="Filter by location..."
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
 
-          <div className="flex items-center text-sm text-gray-600">
-            <Filter className="w-4 h-4 mr-2" />
+          <div className="flex items-center text-sm text-gray-600 dark:text-white">
+            <Filter className="w-4 h-4 mr-2 dark:text-white" />
             {filteredUsers.length} users found
           </div>
         </div>
@@ -126,13 +128,13 @@ function Browse() {
       {/* Users Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredUsers.map((user) => (
-          <div key={user._id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col h-full">
+          <div key={user._id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col h-full">
             <div className="p-6 flex flex-col flex-1">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{user.name}</h3>
                   {user.location && (
-                    <p className="text-sm text-gray-600 flex items-center mt-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 flex items-center mt-1">
                       <MapPin className="w-3 h-3 mr-1" />
                       {user.location}
                     </p>
@@ -142,18 +144,18 @@ function Browse() {
                   {user.rating.count > 0 && (
                     <div className="flex items-center text-sm">
                       <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                      <span className="font-medium">{user.rating.average.toFixed(1)}</span>
-                      <span className="text-gray-500 ml-1">({user.rating.count} swaps)</span>
+                      <span className="font-medium dark:text-gray-100">{user.rating.average.toFixed(1)}</span>
+                      <span className="text-gray-500 dark:text-gray-300 ml-1">({user.rating.count} swaps)</span>
                     </div>
                   )}
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
                     {user.completedSwaps} swaps completed
                   </p>
                 </div>
               </div>
 
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Skills Offered:</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Skills Offered:</h4>
                 <div className="flex flex-wrap gap-2">
                   {user.skillsOffered.slice(0, 3).map((skill, index) => (
                     <span
@@ -172,7 +174,7 @@ function Browse() {
               </div>
 
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Looking for:</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Looking for:</h4>
                 <div className="flex flex-wrap gap-2">
                   {user.skillsWanted && user.skillsWanted.map((skill, idx) => (
                     <span
@@ -186,7 +188,7 @@ function Browse() {
               </div>
 
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Available:</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Available:</h4>
                 <div className="flex flex-wrap gap-2">
                   {user.availability && Object.entries(user.availability).filter(([k, v]) => v).map(([key]) => (
                     <span
@@ -201,31 +203,37 @@ function Browse() {
 
               <div className="flex-1"></div> {/* Spacer to push button to bottom */}
 
-              <button
-                onClick={() => openSwapModal(user)}
-                className={`w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-md hover:from-purple-700 hover:to-blue-700 transition-all duration-200 ${sentRequests[user._id] ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={!!sentRequests[user._id]}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                {sentRequests[user._id] ? 'Request Sent' : 'Request Swap'}
-              </button>
+              {loggedInUser ? (
+                <button
+                  onClick={() => openSwapModal(user)}
+                  className={`w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-md hover:from-purple-700 hover:to-blue-700 transition-all duration-200 ${sentRequests[user._id] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={!!sentRequests[user._id]}
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  {sentRequests[user._id] ? 'Request Sent' : 'Request Swap'}
+                </button>
+              ) : (
+                <div className="w-full text-center py-2 text-purple-600 dark:text-purple-300 font-semibold border-t dark:border-gray-700 mt-4">
+                  <span>Login to request a swap</span>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
 
       {filteredUsers.length === 0 && !loading && (
-        <div className="text-center py-12">
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
           <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No users found</h3>
+          <p className="text-gray-600 dark:text-gray-300">
             Try adjusting your search terms or check back later for more users.
           </p>
         </div>
       )}
 
       {/* Swap Request Modal */}
-      {showSwapModal && selectedUser && (
+      {loggedInUser && showSwapModal && selectedUser && (
         <SwapRequestModal
           user={selectedUser}
           onClose={() => {
@@ -292,25 +300,25 @@ function SwapRequestModal({ user, onClose, setSentRequests }: { user: User; onCl
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-white dark:bg-gray-900 rounded-lg max-w-md w-full p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Request Skill Swap with {user.name}
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Skill you want to learn from {user.name}:
             </label>
             <select
               value={formData.recipientSkill}
               onChange={(e) => setFormData(prev => ({ ...prev, recipientSkill: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               required
             >
-              <option value="">Select a skill...</option>
+              <option value="" className="text-gray-400 dark:text-gray-300 bg-white dark:bg-gray-800">Select a skill...</option>
               {user.skillsOffered.map((skill, index) => (
-                <option key={index} value={skill.name}>
+                <option key={index} value={skill.name} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                   {skill.name} ({skill.level})
                 </option>
               ))}
@@ -318,18 +326,18 @@ function SwapRequestModal({ user, onClose, setSentRequests }: { user: User; onCl
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Skill you want to offer in return:
             </label>
             <select
               value={formData.requesterSkill}
               onChange={(e) => setFormData(prev => ({ ...prev, requesterSkill: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               required
             >
-              <option value="">Select a skill...</option>
+              <option value="" className="text-gray-400 dark:text-gray-300 bg-white dark:bg-gray-800">Select a skill...</option>
               {mySkills.map((skill: any, index) => (
-                <option key={index} value={skill.name}>
+                <option key={index} value={skill.name} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                   {skill.name} ({skill.level})
                 </option>
               ))}
@@ -337,13 +345,13 @@ function SwapRequestModal({ user, onClose, setSentRequests }: { user: User; onCl
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Message (optional):
             </label>
             <textarea
               value={formData.message}
               onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               rows={3}
               placeholder="Tell them why you'd like to swap skills..."
             />
@@ -353,7 +361,7 @@ function SwapRequestModal({ user, onClose, setSentRequests }: { user: User; onCl
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               Cancel
             </button>

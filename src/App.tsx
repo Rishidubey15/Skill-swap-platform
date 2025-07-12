@@ -36,8 +36,8 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-      {user && <Navbar />}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:text-gray-100">
+      <Navbar />
       <Routes>
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
@@ -51,11 +51,7 @@ function AppContent() {
             <Profile />
           </ProtectedRoute>
         } />
-        <Route path="/browse" element={
-          <ProtectedRoute>
-            <Browse />
-          </ProtectedRoute>
-        } />
+        <Route path="/browse" element={<Browse />} />
         <Route path="/swaps" element={
           <ProtectedRoute>
             <SwapRequests />
@@ -66,7 +62,7 @@ function AppContent() {
             <AdminDashboard />
           </ProtectedRoute>
         } />
-        <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+        <Route path="/" element={<Navigate to="/browse" />} />
       </Routes>
     </div>
   );
